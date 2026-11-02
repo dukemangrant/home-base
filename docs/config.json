@@ -1,0 +1,89 @@
+{
+  "cities": [
+    { "name": "Scottsdale, AZ", "lat": 33.4942, "lon": -111.9261 },
+    { "name": "Show Low, AZ", "lat": 34.2542, "lon": -110.0298 },
+    { "name": "Champaign, IL", "lat": 40.1164, "lon": -88.2434 }
+  ],
+
+  "apps": [
+    { "name": "YouTube TV", "pkg": ["com.amazon.firetv.youtube.tv"], "mono": "TV", "a": "#ff8a8a", "b": "#ff5c7a", "tmdb": [] },
+    { "name": "YouTube", "pkg": ["com.amazon.firetv.youtube"], "mono": "YT", "a": "#ffa0a0", "b": "#ff6b6b", "tmdb": [] },
+    { "name": "Paramount+", "pkg": ["com.cbs.ott", "com.cbs.app"], "mono": "P+", "a": "#8fc0ff", "b": "#5a8dff", "tmdb": ["paramount"] },
+    { "name": "HBO Max", "pkg": ["com.wbd.stream", "com.hbo.hbonow"], "mono": "HM", "a": "#cdb0ff", "b": "#9a7bff", "tmdb": ["max", "hbo"] },
+    { "name": "Peacock", "pkg": ["com.peacocktv.peacockandroid"], "mono": "PK", "a": "#ffdc7a", "b": "#f5b942", "tmdb": ["peacock"] },
+    { "name": "Apple TV", "pkg": ["com.apple.atve.amazon.appletv"], "mono": "TV+", "a": "#f2f2f6", "b": "#c9c9d4", "tmdb": ["apple tv"] },
+    { "name": "Netflix", "pkg": ["com.netflix.ninja"], "mono": "N", "a": "#ff8a8a", "b": "#e8504f", "tmdb": ["netflix"] },
+    { "name": "Disney+", "pkg": ["com.disney.disneyplus"], "mono": "D+", "a": "#86b8ff", "b": "#4f86f0", "tmdb": ["disney"] },
+    { "name": "Hulu", "pkg": ["com.hulu.plus"], "mono": "H", "a": "#8ff0aa", "b": "#4fd07a", "tmdb": ["hulu"] },
+    { "name": "Prime Video", "pkg": ["com.amazon.avod", "com.amazon.firebat"], "mono": "PV", "a": "#86e0ee", "b": "#3fb8d0", "tmdb": ["amazon prime", "prime video"] },
+    { "name": "Pluto TV", "pkg": ["tv.pluto.android"], "mono": "PL", "a": "#ffe38a", "b": "#f5c13f", "tmdb": ["pluto"] },
+    { "name": "BBC iPlayer", "pkg": ["uk.co.bbc.iplayer"], "mono": "iP", "a": "#ff9fc0", "b": "#ff5f93", "tmdb": ["bbc iplayer"], "uk": true },
+    { "name": "ITVX", "pkg": ["air.ITVMobilePlayer", "com.itv.itvx"], "mono": "X", "a": "#b9a3ff", "b": "#8663ff", "tmdb": ["itvx"], "uk": true },
+    { "name": "ExpressVPN", "pkg": ["com.expressvpn.vpn"], "mono": "EV", "a": "#ff9a9a", "b": "#e8504f", "tmdb": [] }
+  ],
+
+  "vpnApp": "ExpressVPN",
+
+  "watchMap": [
+    { "match": "peacock", "app": "Peacock" },
+    { "match": "prime", "app": "Prime Video" },
+    { "match": "amazon", "app": "Prime Video" },
+    { "match": "apple", "app": "Apple TV" },
+    { "match": "paramount", "app": "Paramount+" },
+    { "match": "netflix", "app": "Netflix" },
+    { "match": "hulu", "app": "Hulu" },
+    { "match": "max", "app": "HBO Max" },
+    { "match": "nbc", "app": "YouTube TV" },
+    { "match": "cbs", "app": "YouTube TV" },
+    { "match": "fox", "app": "YouTube TV" },
+    { "match": "abc", "app": "YouTube TV" },
+    { "match": "espn", "app": "YouTube TV" },
+    { "match": "fs1", "app": "YouTube TV" },
+    { "match": "tnt", "app": "YouTube TV" },
+    { "match": "nfl", "app": "YouTube TV" },
+    { "match": "mlb", "app": "YouTube TV" },
+    { "match": "usa", "app": "YouTube TV" },
+    { "match": "big ten", "app": "YouTube TV" }
+  ],
+
+  "feed": [
+    { "kind": "team", "name": "Fulham FC", "ini": "FFC", "match": "fulham", "leagues": ["soccer/eng.1", "soccer/eng.2"], "q": "Fulham FC", "h": [230, 260] },
+    { "kind": "league", "name": "EPL", "ini": "EPL", "leagues": ["soccer/eng.1"], "q": "Premier League", "h": [270, 300] },
+    { "kind": "league", "name": "EFL (Championship – League 2)", "ini": "EFL", "leagues": ["soccer/eng.2", "soccer/eng.3", "soccer/eng.4"], "q": "EFL Championship", "h": [200, 230] },
+    { "kind": "league", "name": "Bundesliga 1 · 2 · 3", "ini": "BUN", "leagues": ["soccer/ger.1", "soccer/ger.2", "soccer/ger.3"], "q": "Bundesliga", "h": [0, 30] },
+    { "kind": "league", "name": "La Liga 1 · 2", "ini": "LAL", "leagues": ["soccer/esp.1", "soccer/esp.2"], "q": "La Liga", "h": [20, 50] },
+    { "kind": "league", "name": "Other European Football", "ini": "EUR", "leagues": ["soccer/ned.1", "soccer/bel.1", "soccer/fra.1"], "q": "Eredivisie Ligue 1 Belgian Pro League", "h": [160, 190] },
+    { "kind": "team", "name": "USC Football", "ini": "USC", "match": "usc trojans", "leagues": ["football/college-football"], "q": "USC Trojans football", "h": [350, 20] },
+    { "kind": "team", "name": "Illinois Men's Basketball", "ini": "ILL", "match": "illinois fighting illini", "leagues": ["basketball/mens-college-basketball"], "q": "Illinois Fighting Illini men's basketball", "h": [20, 240] },
+    { "kind": "team", "name": "USC Men's Basketball", "ini": "USC", "match": "usc trojans", "leagues": ["basketball/mens-college-basketball"], "q": "USC Trojans men's basketball", "h": [340, 10] },
+    { "kind": "team", "name": "USC Women's Basketball", "ini": "USC", "match": "usc trojans", "leagues": ["basketball/womens-college-basketball"], "q": "USC Trojans women's basketball", "h": [330, 0] },
+    { "kind": "team", "name": "Illinois Women's Basketball", "ini": "ILL", "match": "illinois fighting illini", "leagues": ["basketball/womens-college-basketball"], "q": "Illinois Fighting Illini women's basketball", "h": [25, 245] },
+    { "kind": "team", "name": "Arizona Cardinals", "ini": "ARI", "match": "arizona cardinals", "leagues": ["football/nfl"], "q": "Arizona Cardinals", "h": [355, 15] },
+    { "kind": "team", "name": "Phoenix Suns", "ini": "PHX", "match": "phoenix suns", "leagues": ["basketball/nba"], "q": "Phoenix Suns", "h": [270, 25] },
+    { "kind": "team", "name": "AZ Diamondbacks", "ini": "AZ", "match": "arizona diamondbacks", "leagues": ["baseball/mlb"], "q": "Arizona Diamondbacks", "h": [345, 185] },
+    { "kind": "team", "name": "Chicago Bears", "ini": "CHI", "match": "chicago bears", "leagues": ["football/nfl"], "q": "Chicago Bears", "h": [225, 20] },
+    { "kind": "team", "name": "Jacksonville Jaguars", "ini": "JAX", "match": "jacksonville jaguars", "leagues": ["football/nfl"], "q": "Jacksonville Jaguars", "h": [185, 40] },
+    { "kind": "league", "name": "NFL", "ini": "NFL", "leagues": ["football/nfl"], "q": "NFL", "h": [215, 250] },
+    { "kind": "team", "name": "Los Angeles Dodgers", "ini": "LAD", "match": "los angeles dodgers", "leagues": ["baseball/mlb"], "q": "Los Angeles Dodgers", "h": [220, 250] },
+    { "kind": "league", "name": "NBA", "ini": "NBA", "leagues": ["basketball/nba"], "q": "NBA", "h": [250, 285] },
+    { "kind": "team", "name": "Oregon Football", "ini": "ORE", "match": "oregon ducks", "leagues": ["football/college-football"], "q": "Oregon Ducks football", "h": [130, 70] }
+  ],
+
+  "news": [
+    { "name": "Fox News", "url": "https://moxie.foxnews.com/google-publisher/latest.xml", "dot": "#ff8a8a", "h": [355, 20] },
+    { "name": "WSJ", "url": "https://feeds.content.dowjones.io/public/rss/RSSWorldNews", "dot": "#8fc0ff", "h": [215, 240] },
+    { "name": "Morning Brew", "url": "https://www.morningbrew.com/daily/rss", "dot": "#ffdc7a", "h": [40, 25] },
+    { "name": "FT (UK)", "url": "https://www.ft.com/rss/home/uk", "dot": "#ffb3c7", "h": [15, 340] }
+  ],
+  "newsPerSource": 5,
+
+  "tmdbProviders": "8|9|15|337|350|531|386|1899|300",
+  "chips": [
+    { "label": "Comedy movies", "path": "/discover/movie", "type": "movie", "params": { "with_genres": "35" } },
+    { "label": "Action movies", "path": "/discover/movie", "type": "movie", "params": { "with_genres": "28" } },
+    { "label": "Comedy series", "path": "/discover/tv", "type": "tv", "params": { "with_genres": "35" } },
+    { "label": "Drama series", "path": "/discover/tv", "type": "tv", "params": { "with_genres": "18" } },
+    { "label": "British shows", "path": "/discover/tv", "type": "tv", "region": "GB", "params": { "with_origin_country": "GB", "with_watch_providers": "38|41" } },
+    { "label": "My List", "list": true }
+  ]
+}

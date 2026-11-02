@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Base</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap">
+<style>
+:root {
+  --bg: #06070f;
+  --surface: rgba(255,255,255,0.07);
+  --surface-2: rgba(255,255,255,0.13);
+  --line: rgba(255,255,255,0.16);
+  --text: #f3f5ff;
+  --muted: #aab0d0;
+  --accent: #8be9fd;
+  --on-accent: #06070f;
+  --font: "Outfit", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--text); font-family: var(--font); font-size: 18px; line-height: 1.4;
+  background-color: var(--bg);
+  background-image: radial-gradient(900px 600px at 8% -8%, rgba(99,102,241,0.38), transparent 60%),
+    radial-gradient(800px 600px at 100% 8%, rgba(34,211,238,0.22), transparent 60%),
+    radial-gradient(900px 700px at 50% 112%, rgba(168,85,247,0.28), transparent 60%);
+  background-attachment: fixed;
+  padding: 28px 40px 56px;
+}
+button, input { font-family: inherit; color: inherit; font-size: inherit; }
+button { cursor: pointer; }
+button:focus, input:focus { outline: 4px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 1600px; margin: 0 auto; }
+.glass { background: var(--surface); border: 1px solid var(--line); }
+.hint { color: var(--muted); font-size: 16px; padding: 12px 4px; }
+.small { font-size: 14px; color: var(--muted); }
+
+.topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: var(--muted); font-size: 15px; }
+.pill { background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px; font-size: 15px; }
+.stage { display: grid; grid-template-columns: 1.1fr 1fr; grid-template-areas: "hello wx" "cmd cmd" "cal cal" "apps apps" "rail rail" "news news"; gap: 26px; }
+.hello { grid-area: hello; display: flex; flex-direction: column; justify-content: flex-end; }
+.greet { font-size: 18px; color: var(--muted); }
+.clock { font-size: 104px; font-weight: 300; letter-spacing: -0.04em; line-height: 0.95; font-variant-numeric: tabular-nums; }
+.date { font-size: 20px; color: var(--muted); margin-top: 8px; }
+.wx { grid-area: wx; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-self: end; }
+.wcard { min-width: 0; border-radius: 22px; padding: 14px 16px; position: relative; }
+.wcard .city { font-size: 14px; color: var(--muted); padding-right: 30px; }
+.wcard .temp { font-size: 40px; font-weight: 400; letter-spacing: -0.03em; line-height: 1.1; }
+.wcard .cond { font-size: 15px; color: var(--muted); }
+.wcard svg { position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; stroke: var(--accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.cmd { grid-area: cmd; display: flex; flex-direction: column; gap: 12px; }
+.cmd-box { display: flex; align-items: center; gap: 14px; border-radius: 22px; padding: 0 20px; height: 66px; }
+.cmd-box:focus-within { border-color: var(--accent); }
+.cmd-box svg { flex: none; width: 24px; height: 24px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cmd-box input { flex: 1; min-width: 0; height: 100%; background: transparent; border: 0; outline: 0; }
+.cmd-box input::placeholder { color: var(--muted); opacity: 1; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 16px; padding: 9px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+
+.sec-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-bottom: 12px; }
+.sec-head h2 { margin: 0; font-size: 22px; font-weight: 500; }
+.sec-head .sub { font-size: 15px; color: var(--muted); margin-left: 10px; font-weight: 400; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button { font-size: 15px; padding: 7px 16px; border-radius: 999px; background: transparent; border: 1px solid var(--line); }
+.filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 500; }
+
+.cal-sec { grid-area: cal; } .apps-sec { grid-area: apps; } .rail-sec { grid-area: rail; } .news-sec { grid-area: news; }
+.week { display: grid; grid-template-columns: repeat(7, minmax(150px, 1fr)); gap: 10px; overflow-x: auto; padding: 4px 4px 12px; }
+.day { min-width: 0; border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.day.now { border-color: var(--accent); }
+.day-h { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 8px; font-size: 15px; color: var(--muted); }
+.day-h b { font-size: 30px; font-weight: 400; color: var(--text); letter-spacing: -0.03em; }
+.evt { display: flex; flex-direction: column; padding-left: 10px; border-left: 3px solid #f5a623; }
+.evt.o { border-left-color: #5ec8d8; }
+.evt .tm { font-size: 14px; color: var(--muted); }
+.evt .tt { font-size: 17px; overflow-wrap: anywhere; }
+.legend { display: flex; gap: 16px; font-size: 14px; color: var(--muted); }
+.legend span { display: flex; align-items: center; gap: 7px; }
+.pdot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+.rail { display: flex; gap: 14px; overflow-x: auto; padding: 8px 6px 16px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.rail > * { scroll-snap-align: start; }
+.app { flex: none; width: 132px; background: transparent; border: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.pic { position: relative; width: 132px; height: 132px; border-radius: 24px; display: grid; place-items: center; font-size: 46px; font-weight: 600; color: rgba(10,10,20,0.88); box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.18); transition: transform 0.15s; }
+.app:focus { outline: none; }
+.app:focus .pic { transform: scale(1.08); outline: 4px solid var(--accent); outline-offset: 4px; }
+.uk { position: absolute; top: 8px; right: 8px; font-size: 12px; font-weight: 600; background: rgba(10,10,20,0.82); color: #fff; padding: 2px 7px; border-radius: 999px; }
+.app-n { font-size: 15px; color: var(--muted); max-width: 132px; }
+
+.card { flex: none; width: 250px; text-align: left; border-radius: 20px; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+.thumb { position: relative; height: 136px; display: grid; place-items: center; color: #fff; overflow: hidden; }
+.thumb .ini { font-size: 42px; font-weight: 600; letter-spacing: 0.02em; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+.thumb img.logo { width: 84px; height: 84px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); }
+.thumb img.cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tag { position: absolute; top: 10px; left: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 999px; background: rgba(6,7,15,0.8); color: #fff; }
+.tag.live { background: #ff5c7a; }
+.card-b { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.card-n { font-size: 17px; font-weight: 500; line-height: 1.25; overflow-wrap: anywhere; }
+.card-s { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.badge { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+.overlay { position: fixed; inset: 0; z-index: 50; background: rgba(6,7,15,0.96); overflow: auto; padding: 36px 48px 60px; }
+.overlay[hidden], .toast[hidden] { display: none; }
+.ov-in { max-width: 1400px; margin: 0 auto; }
+.ov-in h1 { margin: 0 0 16px; font-size: 40px; font-weight: 400; }
+.ov-in h2 { margin: 28px 0 10px; font-size: 22px; font-weight: 500; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; font-size: 16px; color: var(--muted); }
+.field input { height: 54px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); padding: 0 16px; color: var(--text); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.btn { padding: 12px 24px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 500; }
+.chk-row { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 17px; }
+.chk-row b { font-weight: 500; flex: 1; }
+.ok { color: #79e098; } .bad { color: #ff8a8a; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+.res { text-align: left; border-radius: 18px; overflow: hidden; padding: 0; display: flex; flex-direction: column; }
+.poster { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--surface-2); display: block; }
+.res-b { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+.res-t { font-size: 16px; font-weight: 500; }
+.star { align-self: flex-start; background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 14px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 28px; z-index: 80; max-width: 80%; background: var(--text); color: var(--bg); font-size: 18px; font-weight: 500; padding: 14px 26px; border-radius: 999px; text-align: center; }
+
+@media (max-width: 1000px) {
+  body { padding: 20px 16px 48px; }
+  .stage { grid-template-columns: minmax(0, 1fr); grid-template-areas: "hello" "wx" "cmd" "cal" "apps" "rail" "news"; }
+  .clock { font-size: 80px; }
+  .overlay { padding: 24px 16px 48px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><span>Home Base</span><button class="pill" data-act="settings">Settings</button></div>
+  <div class="stage" id="stage"><div class="hint">Loading…</div></div>
+</div>
+<div class="overlay" id="overlay" hidden role="dialog" aria-modal="true"><div class="ov-in" id="ov-in"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var ESPN = "https://site.api.espn.com/apis/site/v2/sports";
+  var cfg = null;
+  var S = { mode: "events", data: [], newsData: {}, newsFilter: "all", lastFocus: null, lastResults: [] };
+  var hasAndroid = !!(window.Android && typeof window.Android.fetch === "function");
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+  // ---------- storage (on this device only) ----------
+  function sget(k) { try { var r = localStorage.getItem("hb:" + k); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+  function sset(k, v) { try { localStorage.setItem("hb:" + k, JSON.stringify(v)); } catch (e) {} }
+
+  // ---------- network ----------
+  var pending = {}, seq = 0;
+  window.__hb = function (id, status, body) {
+    var p = pending[id];
+    if (!p) return;
+    delete pending[id];
+    if (status >= 200 && status < 300) p.ok(body); else p.fail(new Error("HTTP " + status));
+  };
+  function get(url) {
+    return new Promise(function (ok, fail) {
+      if (hasAndroid) {
+        var id = "r" + (++seq);
+        pending[id] = { ok: ok, fail: fail };
+        window.Android.fetch(id, url);
+        setTimeout(function () { if (pending[id]) { delete pending[id]; fail(new Error("timeout")); } }, 25000);
+      } else {
+        fetch(url).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); }).then(ok, fail);
+      }
+    });
+  }
+  function getJSON(url) { return get(url).then(JSON.parse); }
+  function cached(key, ttl, fn) {
+    var c = sget("c:" + key);
+    if (c && Date.now() - c.t < ttl) return Promise.resolve(c.v);
+    return fn().then(function (v) { sset("c:" + key, { t: Date.now(), v: v }); return v; }, function (e) { if (c) return c.v; throw e; });
+  }
+  function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; } return String(h); }
+  function runQueue(tasks, n) {
+    var i = 0;
+    function worker() { if (i >= tasks.length) return Promise.resolve(); var t = tasks[i++]; return t().catch(function () {}).then(worker); }
+    var ws = []; for (var k = 0; k < n; k++) ws.push(worker());
+    return Promise.all(ws);
+  }
+
+  // ---------- small helpers ----------
+  var toastTimer;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 3500);
+  }
+  function fmtWhen(d) {
+    var now = new Date(), t = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    if (d.toDateString() === now.toDateString()) return "Today, " + t;
+    if (d.toDateString() === new Date(now.getTime() + 864e5).toDateString()) return "Tomorrow, " + t;
+    return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + ", " + t;
+  }
+  function ago(ts) {
+    if (!ts) return "";
+    var m = Math.round((Date.now() - ts) / 60000);
+    if (m < 1) return "just now"; if (m < 60) return m + " min ago";
+    var h = Math.round(m / 60); if (h < 24) return h + " h ago";
+    return Math.round(h / 24) + " d ago";
+  }
+  function ymd(d) { return d.getFullYear() + ("0" + (d.getMonth() + 1)).slice(-2) + ("0" + d.getDate()).slice(-2); }
+  function appByName(name) { for (var i = 0; i < cfg.apps.length; i++) if (cfg.apps[i].name === name) return cfg.apps[i]; return null; }
+
+  // ---------- opening apps ----------
+  function pkgList(app) { return Array.isArray(app.pkg) ? app.pkg : [app.pkg]; }
+  function installedPkg(app) {
+    if (!hasAndroid) return null;
+    var l = pkgList(app);
+    for (var i = 0; i < l.length; i++) { if (window.Android.isInstalled(l[i])) return l[i]; }
+    return null;
+  }
+  function launchApp(app) {
+    if (!hasAndroid) { toast("On the Fire Stick this opens " + app.name); return false; }
+    var p = installedPkg(app);
+    if (!p) { toast(app.name + " isn't installed here. See Settings > App check."); return false; }
+    window.Android.launch(p);
+    return true;
+  }
+  function openApp(app) { if (app.uk) vpnGate(app); else launchApp(app); }
+  function openUrl(u) { if (hasAndroid) window.Android.openUrl(u); else window.open(u, "_blank"); }
+
+  // ---------- overlay ----------
+  function openOverlay(html) {
+    if ($("overlay").hidden) S.lastFocus = document.activeElement;
+    $("ov-in").innerHTML = html; $("overlay").hidden = false; $("overlay").scrollTop = 0;
+    var f = $("ov-in").querySelector("button, input");
+    if (f) f.focus();
+  }
+  function closeOverlay() {
+    $("overlay").hidden = true; $("ov-in").innerHTML = "";
+    if (S.lastFocus && S.lastFocus.focus) S.lastFocus.focus();
+  }
+  window.hbBack = function () { if (!$("overlay").hidden) { closeOverlay(); return true; } return false; };
+
+  function vpnGate(app) {
+    openOverlay('<h1>Checking your location…</h1><div class="hint">' + esc(app.name) + ' only works from a UK location.</div>');
+    get("https://ipwho.is/").then(JSON.parse).then(function (j) {
+      if (j && j.country_code === "GB") { closeOverlay(); launchApp(app); return; }
+      var where = j && j.country ? j.country : "an unknown location";
+      openOverlay('<h1>Not on a UK location</h1><div class="hint">You appear to be in ' + esc(where) + '. Connect ExpressVPN to London first, then come back.</div>' +
+        '<div class="btns"><button class="btn primary" data-act="openVpn">Open ExpressVPN</button>' +
+        '<button class="btn" data-act="launchAnyway" data-app="' + esc(app.name) + '">Open ' + esc(app.name) + ' anyway</button>' +
+        '<button class="btn" data-act="closeOv">Cancel</button></div>');
+    }).catch(function () {
+      openOverlay('<h1>Couldn\'t check your location</h1><div class="btns"><button class="btn primary" data-act="openVpn">Open ExpressVPN</button>' +
+        '<button class="btn" data-act="launchAnyway" data-app="' + esc(app.name) + '">Open ' + esc(app.name) + ' anyway</button>' +
+        '<button class="btn" data-act="closeOv">Cancel</button></div>');
+    });
+  }
+
+  // ---------- clock + weather ----------
+  var ICONS = {
+    sun: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    part: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 2v1.5M2 8h1.5M3.8 3.8l1 1M12.2 3.8l-1 1"/><path d="M8 20h9a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.4A3.3 3.3 0 0 0 8 20z"/></svg>',
+    cloud: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19h10a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.6 1.6A3.7 3.7 0 0 0 7 19z"/></svg>',
+    rain: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15h10a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 15z"/><path d="M8 18l-1 2M12 18l-1 2M16 18l-1 2"/></svg>'
+  };
+  function wxInfo(c) {
+    if (c === 0) return ["Clear", "sun"];
+    if (c <= 2) return ["Partly cloudy", "part"];
+    if (c === 3) return ["Overcast", "cloud"];
+    if (c === 45 || c === 48) return ["Fog", "cloud"];
+    if ((c >= 51 && c <= 67) || (c >= 80 && c <= 82)) return ["Rain", "rain"];
+    if ((c >= 71 && c <= 77) || c === 85 || c === 86) return ["Snow", "rain"];
+    if (c >= 95) return ["Thunderstorms", "rain"];
+    return ["Cloudy", "cloud"];
+  }
+  function tickClock() {
+    var d = new Date(), h = d.getHours();
+    $("greet").textContent = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+    $("clock").textContent = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    $("date").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  }
+  function loadWeather() {
+    cfg.cities.forEach(function (c, i) {
+      var url = "https://api.open-meteo.com/v1/forecast?latitude=" + c.lat + "&longitude=" + c.lon +
+        "&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto";
+      cached("wx:" + i, 10 * 60 * 1000, function () {
+        return getJSON(url).then(function (j) { return { t: Math.round(j.current.temperature_2m), c: j.current.weather_code }; });
+      }).then(function (w) {
+        var info = wxInfo(w.c), el = $("wx-" + i);
+        if (el) el.innerHTML = ICONS[info[1]] + '<div class="city">' + esc(c.name) + '</div><div class="temp">' + w.t + '°</div><div class="cond">' + info[0] + '</div>';
+      }).catch(function () {});
+    });
+  }
+
+  // ---------- calendar (ICS links) ----------
+  var WD = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+  function parseDT(v) {
+    var m = /^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?$/.exec(v.trim());
+    if (!m) return null;
+    if (m[7]) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]));
+    return new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0));
+  }
+  function unesc(s) { return s.replace(/\\n/g, " ").replace(/\\,/g, ",").replace(/\\;/g, ";").replace(/\\\\/g, "\\"); }
+  function parseICS(text) {
+    var lines = text.replace(/\r\n[ \t]/g, "").replace(/\n[ \t]/g, "").split(/\r?\n/), evs = [], cur = null;
+    lines.forEach(function (l) {
+      if (l === "BEGIN:VEVENT") { cur = {}; return; }
+      if (l === "END:VEVENT") { if (cur && cur.start) evs.push(cur); cur = null; return; }
+      if (!cur) return;
+      var i = l.indexOf(":"); if (i < 0) return;
+      var head = l.slice(0, i), val = l.slice(i + 1), name = head.split(";")[0].toUpperCase();
+      if (name === "DTSTART") { cur.start = parseDT(val); cur.allDay = val.length === 8; }
+      else if (name === "DTEND") cur.end = parseDT(val);
+      else if (name === "SUMMARY") cur.title = unesc(val);
+      else if (name === "RRULE") cur.rrule = val;
+      else if (name === "EXDATE") { cur.ex = cur.ex || []; val.split(",").forEach(function (x) { var d = parseDT(x); if (d) cur.ex.push(d); }); }
+    });
+    return evs.filter(function (e) { return e.start; });
+  }
+  function utcDay(d) { return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
+  function rrOf(ev) { if (ev._r) return ev._r; var o = {}; ev.rrule.split(";").forEach(function (p) { var kv = p.split("="); o[kv[0]] = kv[1]; }); ev._r = o; return o; }
+  function occursOn(ev, day) {
+    var s = ev.start, dd = utcDay(day), sd = utcDay(s);
+    if (ev.ex && ev.ex.some(function (x) { return utcDay(x) === dd; })) return null;
+    var at = new Date(day.getFullYear(), day.getMonth(), day.getDate(), s.getHours(), s.getMinutes(), 0);
+    if (!ev.rrule) {
+      if (ev.allDay && ev.end) return (dd >= sd && dd < utcDay(ev.end)) ? at : null;
+      return dd === sd ? s : null;
+    }
+    if (dd < sd) return null;
+    var r = rrOf(ev), iv = parseInt(r.INTERVAL || "1", 10) || 1;
+    if (r.UNTIL) { var u = parseDT(r.UNTIL); if (u && utcDay(u) < dd) return null; }
+    var ok = false;
+    if (r.FREQ === "DAILY") ok = (dd - sd) % iv === 0;
+    else if (r.FREQ === "WEEKLY") {
+      var wk = Math.floor((dd + 4) / 7) - Math.floor((sd + 4) / 7);
+      var days = r.BYDAY ? r.BYDAY.split(",").map(function (x) { return x.slice(-2); }) : [WD[s.getDay()]];
+      ok = wk % iv === 0 && days.indexOf(WD[day.getDay()]) >= 0;
+    } else if (r.FREQ === "MONTHLY") {
+      var mo = (day.getFullYear() - s.getFullYear()) * 12 + day.getMonth() - s.getMonth();
+      ok = mo % iv === 0 && day.getDate() === s.getDate();
+    } else if (r.FREQ === "YEARLY") {
+      ok = (day.getFullYear() - s.getFullYear()) % iv === 0 && day.getMonth() === s.getMonth() && day.getDate() === s.getDate();
+    }
+    return ok ? at : null;
+  }
+  function loadCalendar() {
+    var box = $("week");
+    var sources = [["g", sget("cal1")], ["o", sget("cal2")]].filter(function (x) { return x[1]; });
+    if (!sources.length) { box.innerHTML = '<div class="hint">Add your Google or Outlook calendar link in Settings to see your week here.</div>'; return; }
+    var base = new Date(); base.setHours(0, 0, 0, 0);
+    var days = []; for (var i = 0; i < 7; i++) days.push(new Date(base.getFullYear(), base.getMonth(), base.getDate() + i));
+    var cols = days.map(function () { return []; });
+    Promise.all(sources.map(function (s) {
+      return cached("ics:" + s[0] + hash(s[1]), 10 * 60 * 1000, function () { return get(s[1]); }).then(function (text) {
+        parseICS(text).forEach(function (ev) {
+          days.forEach(function (d, di) {
+            var at = occursOn(ev, d);
+            if (at) cols[di].push({ src: s[0], at: at, title: ev.title || "(no title)", allDay: ev.allDay });
+          });
+        });
+      }).catch(function () { cols[0].push({ src: s[0], at: new Date(0), title: "Couldn't load this calendar", allDay: true }); });
+    })).then(function () {
+      box.innerHTML = days.map(function (d, di) {
+        var evs = cols[di].sort(function (a, b) { return a.at - b.at; }).map(function (e) {
+          return '<div class="evt ' + e.src + '"><span class="tm">' + (e.allDay ? "All day" : e.at.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })) + '</span><span class="tt">' + esc(e.title) + '</span></div>';
+        }).join("");
+        return '<div class="day glass' + (di === 0 ? " now" : "") + '"><div class="day-h"><span>' + (di === 0 ? "Today" : d.toLocaleDateString("en-US", { weekday: "short" })) + '</span><b>' + d.getDate() + '</b></div>' + evs + '</div>';
+      }).join("");
+    });
+  }
+
+  // ---------- sports (ESPN, no key) ----------
+  function broadcastName(c) {
+    var b = (c.broadcasts || [])[0]; if (!b) return "";
+    return (b.media && b.media.shortName) || (b.names && b.names[0]) || "";
+  }
+  function appForNetwork(name) {
+    if (!name) return null; var n = name.toLowerCase();
+    for (var i = 0; i < cfg.watchMap.length; i++) if (n.indexOf(cfg.watchMap[i].match) >= 0) return appByName(cfg.watchMap[i].app);
+    return null;
+  }
+  function findTeam(sl, match) {
+    return cached("teams:" + sl, 7 * 864e5, function () {
+      return getJSON(ESPN + "/" + sl + "/teams?limit=1000").then(function (j) {
+        var arr = (j.sports && j.sports[0].leagues[0].teams) || [];
+        return arr.map(function (x) { return { id: x.team.id, name: x.team.displayName, logo: (x.team.logos && x.team.logos[0] && x.team.logos[0].href) || "" }; });
+      });
+    }).then(function (list) {
+      match = match.toLowerCase();
+      for (var i = 0; i < list.length; i++) if (list[i].name.toLowerCase().indexOf(match) >= 0) return list[i];
+      return null;
+    });
+  }
+  async function computeTeamEvent(item) {
+    var logo = "";
+    for (var li = 0; li < item.leagues.length; li++) {
+      var sl = item.leagues[li];
+      var team = await findTeam(sl, item.match);
+      if (!team) continue;
+      logo = team.logo;
+      var j = await getJSON(ESPN + "/" + sl + "/teams/" + team.id + "/schedule");
+      var evs = (j.events || []).map(function (e) {
+        var c = e.competitions && e.competitions[0];
+        return { c: c, date: new Date(e.date), state: c && c.status && c.status.type && c.status.type.state };
+      }).filter(function (x) { return x.c && x.state !== "post"; }).sort(function (a, b) { return a.date - b.date; });
+      if (evs.length) {
+        var g = evs[0];
+        var me = g.c.competitors.filter(function (c) { return String(c.team && c.team.id) === String(team.id); })[0] || {};
+        var opp = g.c.competitors.filter(function (c) { return String(c.team && c.team.id) !== String(team.id); })[0];
+        var oppName = opp && opp.team ? (opp.team.displayName || opp.team.name) : "TBD";
+        var watch = broadcastName(g.c), app = appForNetwork(watch);
+        return { line: (g.state === "in" ? "LIVE · " : "Next: ") + (me.homeAway === "away" ? "at " : "vs ") + oppName + " · " + fmtWhen(g.date),
+          watch: watch, app: app ? app.name : "", logo: logo, live: g.state === "in" };
+      }
+    }
+    return { line: "No upcoming game listed", watch: "", app: "", logo: logo, live: false };
+  }
+  async function computeLeagueEvent(item) {
+    var best = null, today = new Date(), end = new Date(today.getTime() + 7 * 864e5), range = ymd(today) + "-" + ymd(end);
+    await Promise.all(item.leagues.map(async function (sl) {
+      try {
+        var j = await getJSON(ESPN + "/" + sl + "/scoreboard?dates=" + range + "&limit=200");
+        (j.events || []).forEach(function (e) {
+          var c = e.competitions && e.competitions[0], st = c && c.status && c.status.type && c.status.type.state;
+          if (!c || st === "post") return;
+          var d = new Date(e.date);
+          if (!best || d < best.date) best = { e: e, c: c, date: d, state: st };
+        });
+      } catch (x) {}
+    }));
+    if (!best) return { line: "No matches listed this week", watch: "", app: "", logo: "", live: false };
+    var watch = broadcastName(best.c), app = appForNetwork(watch);
+    return { line: (best.state === "in" ? "LIVE · " : "Next: ") + (best.e.shortName || best.e.name) + " · " + fmtWhen(best.date),
+      watch: watch, app: app ? app.name : "", logo: "", live: best.state === "in" };
+  }
+  function loadEvent(i) {
+    var item = cfg.feed[i];
+    var fn = item.kind === "team" ? computeTeamEvent : computeLeagueEvent;
+    return cached("ev:" + item.name, 10 * 60 * 1000, function () { return fn(item); })
+      .catch(function () { return { line: "Couldn't load this schedule", watch: "", app: "", logo: "", live: false }; })
+      .then(function (ev) { S.data[i].ev = ev; if (S.mode === "events") updateCard(i); });
+  }
+
+  // ---------- news ----------
+  function txt(n, tag) { var e = n.getElementsByTagName(tag)[0]; return e ? (e.textContent || "").trim() : ""; }
+  function attr(n, tag, a) { var e = n.getElementsByTagName(tag)[0]; return e ? (e.getAttribute(a) || "") : ""; }
+  function parseRSS(text, limit) {
+    var doc = new DOMParser().parseFromString(text, "text/xml"), out = [];
+    var items = doc.getElementsByTagName("item"); if (!items.length) items = doc.getElementsByTagName("entry");
+    for (var i = 0; i < items.length && out.length < limit; i++) {
+      var it = items[i];
+      var img = attr(it, "media:thumbnail", "url") || attr(it, "media:content", "url");
+      if (!img) { var en = attr(it, "enclosure", "url"); if (/\.(jpe?g|png|webp)/i.test(en)) img = en; }
+      var d = txt(it, "pubDate") || txt(it, "published") || txt(it, "updated");
+      out.push({ title: txt(it, "title"), link: txt(it, "link") || attr(it, "link", "href"), ts: d ? Date.parse(d) : 0, img: img, source: txt(it, "source") });
+    }
+    return out;
+  }
+  function loadItemNews(i) {
+    var item = cfg.feed[i];
+    var url = "https://news.google.com/rss/search?q=" + encodeURIComponent(item.q) + "&hl=en-US&gl=US&ceid=US:en";
+    return cached("gn:" + item.name, 15 * 60 * 1000, function () { return get(url).then(function (t) { return parseRSS(t, 1); }); })
+      .catch(function () { return []; })
+      .then(function (r) { S.data[i].news = r[0] || { title: "No headlines found", link: "", ts: 0 }; if (S.mode === "news") updateCard(i); });
+  }
+  function loadNewsSources() {
+    cfg.news.forEach(function (n, si) {
+      cached("rss:" + n.name, 15 * 60 * 1000, function () { return get(n.url).then(function (t) { return parseRSS(t, cfg.newsPerSource || 5); }); })
+        .catch(function () { return null; })
+        .then(function (items) { S.newsData[si] = items; renderNews(); });
+    });
+  }
+
+  // ---------- rendering: teams & leagues rail ----------
+  function cardHtml(i) {
+    var it = cfg.feed[i], d = S.data[i] || {}, ev = d.ev, nw = d.news, events = S.mode === "events";
+    var bg = "linear-gradient(135deg,hsl(" + it.h[0] + " 55% 38%),hsl(" + it.h[1] + " 50% 20%))";
+    var thumb, tag, title, sub, badge, live = false;
+    if (events) {
+      thumb = (ev && ev.logo) ? '<img class="logo" src="' + esc(ev.logo) + '" alt="">' : '<span class="ini">' + esc(it.ini) + '</span>';
+      live = !!(ev && ev.live);
+      tag = live ? "LIVE" : (it.kind === "team" ? "TEAM" : "LEAGUE");
+      title = it.name; sub = ev ? ev.line : "Loading…";
+      var a = ev && ev.app ? appByName(ev.app) : null;
+      badge = a ? '<span class="pdot" style="background:' + a.a + '"></span>' + esc(a.name) + (ev.watch ? " · " + esc(ev.watch) : "")
+        : (ev && ev.watch ? '<span class="pdot" style="background:#aab0d0"></span>' + esc(ev.watch) : "");
+    } else {
+      thumb = nw && nw.img ? '<img class="cover" src="' + esc(nw.img) + '" alt="">' : "";
+      tag = "NEWS";
+      title = nw ? nw.title : "Loading…";
+      sub = it.name + (nw && nw.ts ? " · " + ago(nw.ts) : "");
+      badge = '<span class="pdot" style="background:#aab0d0"></span>Opens in browser';
+    }
+    return '<button class="card glass" data-act="feedCard" data-i="' + i + '"><span class="thumb" style="background:' + bg + '">' + thumb +
+      '<span class="tag' + (live ? " live" : "") + '">' + tag + '</span></span><span class="card-b"><span class="card-n">' + esc(title) +
+      '</span><span class="card-s">' + esc(sub) + '</span><span class="badge">' + badge + '</span></span></button>';
+  }
+  function updateCard(i) {
+    var old = document.querySelector('#feedrail [data-i="' + i + '"]');
+    if (!old) return;
+    var tmp = document.createElement("div"); tmp.innerHTML = cardHtml(i);
+    var focused = document.activeElement === old;
+    old.replaceWith(tmp.firstChild);
+    if (focused) { var n = document.querySelector('#feedrail [data-i="' + i + '"]'); if (n) n.focus(); }
+  }
+  function renderFeed() {
+    var h = ""; for (var i = 0; i < cfg.feed.length; i++) h += cardHtml(i);
+    $("feedrail").innerHTML = h; $("feedrail").scrollLeft = 0;
+  }
+  var newsLoaded = false;
+  function setMode(mode) {
+    S.mode = mode;
+    var bs = document.querySelectorAll("#feedfilters button");
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute("aria-pressed", bs[i].getAttribute("data-f") === mode ? "true" : "false");
+    renderFeed();
+    if (mode === "news" && !newsLoaded) {
+      newsLoaded = true;
+      runQueue(cfg.feed.map(function (_, i) { return function () { return loadItemNews(i); }; }), 4);
+    }
+  }
+  function feedCardClick(i) {
+    var d = S.data[i] || {};
+    if (S.mode === "events") {
+      var a = d.ev && d.ev.app ? appByName(d.ev.app) : null;
+      if (a) openApp(a); else toast(d.ev && d.ev.watch ? "Watch on " + d.ev.watch + " (no matching app set up)" : "No broadcast listed yet");
+    } else if (d.news && d.news.link) openUrl(d.news.link);
+  }
+
+  // ---------- rendering: general news ----------
+  function renderNews() {
+    var h = "";
+    cfg.news.forEach(function (n, si) {
+      if (S.newsFilter !== "all" && S.newsFilter !== String(si)) return;
+      var items = S.newsData[si];
+      if (items === undefined) { h += '<div class="hint">Loading ' + esc(n.name) + '…</div>'; return; }
+      if (!items || !items.length) { h += '<div class="hint">' + esc(n.name) + ' feed unavailable.</div>'; return; }
+      items.forEach(function (it, k) {
+        var bg = "linear-gradient(135deg,hsl(" + n.h[0] + " 55% 38%),hsl(" + n.h[1] + " 50% 20%))";
+        h += '<button class="card glass" data-act="newsCard" data-s="' + si + '" data-k="' + k + '"><span class="thumb" style="background:' + bg + '">' +
+          (it.img ? '<img class="cover" src="' + esc(it.img) + '" alt="">' : "") + '<span class="tag">' + esc(n.name.toUpperCase()) + '</span></span>' +
+          '<span class="card-b"><span class="card-n">' + esc(it.title) + '</span><span class="card-s">' + esc(n.name) + (it.ts ? " · " + ago(it.ts) : "") +
+          '</span><span class="badge"><span class="pdot" style="background:' + n.dot + '"></span>Opens in browser</span></span></button>';
+      });
+    });
+    $("newsrail").innerHTML = h;
+  }
+
+  // ---------- movies and shows (TMDB, needs a key) ----------
+  function tmdb(path, params) {
+    var key = sget("tmdb");
+    if (!key) return Promise.reject(new Error("nokey"));
+    var q = new URLSearchParams(Object.assign({ api_key: key, language: "en-US" }, params || {}));
+    return getJSON("https://api.themoviedb.org/3" + path + "?" + q.toString());
+  }
+  function providerApps(type, id, region) {
+    return tmdb("/" + type + "/" + id + "/watch/providers").then(function (j) {
+      var r = (j.results || {})[region] || {};
+      var names = [].concat(r.flatrate || [], r.free || [], r.ads || []).map(function (p) { return p.provider_name.toLowerCase(); });
+      return cfg.apps.filter(function (a) { return (a.tmdb || []).some(function (t) { return names.some(function (n) { return n.indexOf(t) >= 0; }); }); });
+    }).catch(function () { return []; });
+  }
+  function resultsHtml(title, list) {
+    if (!list.length) return '<h1>' + esc(title) + '</h1><div class="hint">Nothing found.</div>';
+    var saved = sget("list") || [];
+    return '<h1>' + esc(title) + '</h1><div class="grid">' + list.map(function (r, i) {
+      var on = saved.some(function (s) { return s.id === r.id && s.type === r.type; });
+      return '<div><button class="res glass" data-act="openTitle" data-i="' + i + '" style="width:100%">' +
+        (r.poster ? '<img class="poster" src="https://image.tmdb.org/t/p/w342' + esc(r.poster) + '" alt="">' : '<div class="poster"></div>') +
+        '<span class="res-b"><span class="res-t">' + esc(r.title) + (r.year ? " (" + esc(r.year) + ")" : "") + '</span>' +
+        '<span class="small">' + (r.apps.length ? r.apps.map(function (a) { return esc(a.name); }).join(", ") : "Not on your apps") + '</span></span></button>' +
+        '<button class="star" data-act="toggleList" data-i="' + i + '" aria-pressed="' + on + '">' + (on ? "★ In My List" : "☆ Add to My List") + '</button></div>';
+    }).join("") + '</div><div class="btns"><button class="btn" data-act="closeOv">Close</button></div>';
+  }
+  async function buildResults(rows, region) {
+    var out = await Promise.all(rows.slice(0, 12).map(async function (x) {
+      var type = x.media_type || x._type;
+      return { id: x.id, type: type, title: x.title || x.name || "", poster: x.poster_path || "", region: region,
+        year: ((x.release_date || x.first_air_date || "") + "").slice(0, 4), apps: await providerApps(type, x.id, region) };
+    }));
+    return out;
+  }
+  async function runSearch(label, path, params, region, type) {
+    openOverlay('<h1>' + esc(label) + '</h1><div class="hint">Loading…</div>');
+    try {
+      var j = await tmdb(path, params);
+      var rows = (j.results || []).filter(function (x) { return x.media_type !== "person"; });
+      rows.forEach(function (x) { x._type = type; });
+      S.lastResults = await buildResults(rows, region);
+      openOverlay(resultsHtml(label, S.lastResults));
+    } catch (e) {
+      openOverlay('<h1>' + esc(label) + '</h1><div class="hint">' + (e.message === "nokey" ? "Add your TMDB key in Settings first." : "Couldn't load results.") + '</div><div class="btns"><button class="btn" data-act="closeOv">Close</button></div>');
+    }
+  }
+  function chipSearch(c) {
+    if (c.list) {
+      var saved = sget("list") || [];
+      S.lastResults = saved.map(function (s) { return { id: s.id, type: s.type, title: s.title, poster: s.poster, region: s.region || "US", year: s.year || "", apps: [] }; });
+      openOverlay(resultsHtml("My List", S.lastResults));
+      S.lastResults.forEach(function (r, i) {
+        providerApps(r.type, r.id, r.region).then(function (apps) { r.apps = apps; var b = document.querySelector('#ov-in [data-act="openTitle"][data-i="' + i + '"] .small'); if (b) b.textContent = apps.length ? apps.map(function (a) { return a.name; }).join(", ") : "Not on your apps"; });
+      });
+      return;
+    }
+    var region = c.region || "US";
+    var params = Object.assign({ sort_by: "popularity.desc", watch_region: region, with_watch_providers: cfg.tmdbProviders }, c.params || {});
+    runSearch(c.label, c.path, params, region, c.type);
+  }
+  function textSearch(q) { runSearch('Results for "' + q + '"', "/search/multi", { query: q, include_adult: "false" }, "US", ""); }
+
+  // ---------- settings ----------
+  function openSettings() {
+    openOverlay('<h1>Settings</h1>' +
+      '<label class="field">Google calendar link (the secret address in iCal format)<input id="s-cal1" type="text" autocomplete="off" value="' + esc(sget("cal1") || "") + '"></label>' +
+      '<label class="field">Outlook calendar link (published calendar, ICS)<input id="s-cal2" type="text" autocomplete="off" value="' + esc(sget("cal2") || "") + '"></label>' +
+      '<label class="field">TMDB API key<input id="s-tmdb" type="text" autocomplete="off" value="' + esc(sget("tmdb") || "") + '"></label>' +
+      '<div class="btns"><button class="btn primary" data-act="saveSettings">Save</button><button class="btn" data-act="closeOv">Close</button></div>' +
+      '<h2>App check</h2><div id="appcheck"></div><h2>All apps on this device</h2><div id="allapps" class="small"></div>');
+    $("appcheck").innerHTML = cfg.apps.map(function (a) {
+      var p = installedPkg(a);
+      return '<div class="chk-row"><b>' + esc(a.name) + '</b>' + (p ? '<span class="ok">Found · ' + esc(p) + '</span>' : '<span class="bad">Not found · tried ' + esc(pkgList(a).join(", ")) + '</span>') + '</div>';
+    }).join("");
+    if (hasAndroid) {
+      try {
+        var apps = JSON.parse(window.Android.listApps());
+        apps.sort(function (a, b) { return a.label.localeCompare(b.label); });
+        $("allapps").innerHTML = apps.map(function (a) { return esc(a.label) + " — " + esc(a.pkg); }).join("<br>");
+      } catch (e) { $("allapps").textContent = "Couldn't list apps."; }
+    } else $("allapps").textContent = "Only available on the Fire Stick.";
+  }
+
+  // ---------- clicks ----------
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]"); if (!b) return;
+    var act = b.getAttribute("data-act"), i = parseInt(b.getAttribute("data-i"), 10);
+    if (act === "app") openApp(cfg.apps[i]);
+    else if (act === "settings") openSettings();
+    else if (act === "closeOv") closeOverlay();
+    else if (act === "saveSettings") {
+      sset("cal1", $("s-cal1").value.trim()); sset("cal2", $("s-cal2").value.trim()); sset("tmdb", $("s-tmdb").value.trim());
+      closeOverlay(); toast("Saved"); loadCalendar();
+    }
+    else if (act === "openVpn") { var v = appByName(cfg.vpnApp); closeOverlay(); if (v) launchApp(v); }
+    else if (act === "launchAnyway") { var a = appByName(b.getAttribute("data-app")); closeOverlay(); if (a) launchApp(a); }
+    else if (act === "feedCard") feedCardClick(i);
+    else if (act === "mode") setMode(b.getAttribute("data-f"));
+    else if (act === "newsCard") { var it = (S.newsData[b.getAttribute("data-s")] || [])[parseInt(b.getAttribute("data-k"), 10)]; if (it && it.link) openUrl(it.link); }
+    else if (act === "nfilter") {
+      S.newsFilter = b.getAttribute("data-f");
+      var nb = document.querySelectorAll("#newsfilters button");
+      for (var k = 0; k < nb.length; k++) nb[k].setAttribute("aria-pressed", nb[k] === b ? "true" : "false");
+      renderNews();
+    }
+    else if (act === "chip") chipSearch(cfg.chips[i]);
+    else if (act === "openTitle") {
+      var r = S.lastResults[i]; if (!r) return;
+      if (r.apps.length) { closeOverlay(); openApp(r.apps[0]); } else toast("Not on any of your apps right now");
+    }
+    else if (act === "toggleList") {
+      var r2 = S.lastResults[i]; if (!r2) return;
+      var list = sget("list") || [], idx = -1;
+      list.forEach(function (s, n) { if (s.id === r2.id && s.type === r2.type) idx = n; });
+      if (idx >= 0) list.splice(idx, 1); else list.push({ id: r2.id, type: r2.type, title: r2.title, poster: r2.poster, region: r2.region, year: r2.year });
+      sset("list", list);
+      var on = idx < 0; b.setAttribute("aria-pressed", on); b.textContent = on ? "★ In My List" : "☆ Add to My List";
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target && e.target.id === "q" && e.target.value.trim()) textSearch(e.target.value.trim());
+  });
+
+  // ---------- build the page ----------
+  function build() {
+    var wx = cfg.cities.map(function (c, i) { return '<div class="wcard glass" id="wx-' + i + '"><div class="city">' + esc(c.name) + '</div><div class="temp">…</div></div>'; }).join("");
+    var chips = cfg.chips.map(function (c, i) { return '<button class="chip" data-act="chip" data-i="' + i + '">' + esc(c.label) + '</button>'; }).join("");
+    var apps = cfg.apps.map(function (a, i) {
+      return '<button class="app" data-act="app" data-i="' + i + '" aria-label="' + esc(a.name) + '"><span class="pic" style="background:linear-gradient(145deg,' + a.a + ',' + a.b + ')">' + esc(a.mono) + (a.uk ? '<span class="uk">UK</span>' : "") + '</span><span class="app-n">' + esc(a.name) + '</span></button>';
+    }).join("");
+    var nf = '<button data-act="nfilter" data-f="all" aria-pressed="true">All</button>' + cfg.news.map(function (n, i) { return '<button data-act="nfilter" data-f="' + i + '" aria-pressed="false">' + esc(n.name) + '</button>'; }).join("");
+    $("stage").innerHTML =
+      '<header class="hello"><div class="greet" id="greet"></div><div class="clock" id="clock"></div><div class="date" id="date"></div></header>' +
+      '<section class="wx" aria-label="Weather">' + wx + '</section>' +
+      '<section class="cmd"><label class="cmd-box glass" for="q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>' +
+        '<input id="q" type="text" placeholder="Search movies and shows across your apps" autocomplete="off"></label><div class="chips">' + chips + '</div></section>' +
+      '<section class="cal-sec"><div class="sec-head"><h2>Family calendar<span class="sub">next 7 days</span></h2><div class="legend"><span><span class="pdot" style="background:#f5a623"></span>Google</span><span><span class="pdot" style="background:#5ec8d8"></span>Outlook</span></div></div><div class="week" id="week"></div></section>' +
+      '<section class="apps-sec"><div class="sec-head"><h2>Apps</h2></div><div class="rail" aria-label="Apps">' + apps + '</div></section>' +
+      '<section class="rail-sec"><div class="sec-head"><h2>Teams &amp; news<span class="sub">your order</span></h2><div class="filters" id="feedfilters" role="group" aria-label="View"><button data-act="mode" data-f="events" aria-pressed="true">Upcoming events</button><button data-act="mode" data-f="news" aria-pressed="false">News</button></div></div><div class="rail" id="feedrail" aria-label="Teams and leagues"></div></section>' +
+      '<section class="news-sec"><div class="sec-head"><h2>News<span class="sub">' + esc(cfg.news.map(function (n) { return n.name; }).join(" · ")) + '</span></h2><div class="filters" id="newsfilters" role="group" aria-label="News source">' + nf + '</div></div><div class="rail" id="newsrail" aria-label="News"></div></section>';
+
+    S.data = cfg.feed.map(function () { return {}; });
+    tickClock(); setInterval(tickClock, 15000);
+    loadWeather(); loadCalendar(); renderFeed(); renderNews(); loadNewsSources();
+    runQueue(cfg.feed.map(function (_, i) { return function () { return loadEvent(i); }; }), 4);
+    var first = document.querySelector(".app"); if (first) first.focus();
+  }
+
+  fetch("config.json?v=" + Date.now()).then(function (r) { return r.json(); }).then(function (j) { cfg = j; build(); })
+    .catch(function () { $("stage").innerHTML = '<div class="hint">Couldn\'t load config.json. Check the file for a typo.</div>'; });
+})();
+</script>
+</body>
+</html>
